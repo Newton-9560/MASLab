@@ -15,7 +15,7 @@ class Agentverse_HumanEval(MAS):
         
         self.max_turn = self.method_config['max_turn']
         self.cnt_agents = self.method_config['cnt_agents']
-        self.max_criticizing_rounds = self.config['max_criticizing_rounds']
+        self.max_criticizing_rounds = self.method_config['max_criticizing_rounds']
         
         self.advice = "No advice yet."
         self.history = []
