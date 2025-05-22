@@ -1,3 +1,3 @@
-from .agentverse_main import Agentverse_MAIN
-from .agentverse_mgsm import Agentverse_MGSM
-from .agentverse_humaneval import Agentverse_HumanEval
+from .agentverse_main import AgentVerse_Main
+from .agentverse_mgsm import AgentVerse_MGSM
+from .agentverse_humaneval import AgentVerse_HumanEval

@@ -6,7 +6,7 @@ from methods.mas_base import MAS
 from methods.utils import load_config
 from .prompt_humaneval import *
 
-class Agentverse_HumanEval(MAS):
+class AgentVerse_HumanEval(MAS):
     def __init__(self, general_config, method_config_name = "config_humaneval"):
         super().__init__(general_config)
         

@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
         response = mas.inference(sample)
         
-        print(response)
+        print(json.dumps(response, indent=4))
         print(f"\n>> Token stats: {json.dumps(mas.get_token_stats(), indent=4)}")
     
     else:
