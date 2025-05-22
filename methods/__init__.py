@@ -3,6 +3,7 @@ from .cot import CoT
 from .agentverse import AgentVerse_HumanEval, AgentVerse_MGSM, AgentVerse_Main
 from .llm_debate import LLM_Debate_Main
 from .dylan import DyLAN_HumanEval, DyLAN_MATH, DyLAN_MMLU, DyLAN_Main
+from .autogen import AutoGen_Main
 
 method2class = {
     "vanilla": MAS,
@@ -14,7 +15,8 @@ method2class = {
     "dylan_humaneval": DyLAN_HumanEval,
     "dylan_math": DyLAN_MATH,
     "dylan_mmlu": DyLAN_MMLU,
-    "dylan": DyLAN_Main
+    "dylan": DyLAN_Main,
+    "autogen": AutoGen_Main
 }
 
 def get_method_class(method_name, dataset_name=None):
