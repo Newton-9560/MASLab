@@ -5,6 +5,7 @@ from .llm_debate import LLM_Debate_Main
 from .dylan import DyLAN_HumanEval, DyLAN_MATH, DyLAN_MMLU, DyLAN_Main
 from .autogen import AutoGen_Main
 from .camel import CAMEL_Main
+from .evomac import EvoMAC_Main
 
 method2class = {
     "vanilla": MAS,
@@ -18,7 +19,8 @@ method2class = {
     "dylan_mmlu": DyLAN_MMLU,
     "dylan": DyLAN_Main,
     "autogen": AutoGen_Main,
-    "camel": CAMEL_Main
+    "camel": CAMEL_Main,
+    "evomac": EvoMAC_Main
 }
 
 def get_method_class(method_name, dataset_name=None):
