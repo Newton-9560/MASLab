@@ -29,10 +29,11 @@ def process_sample(args, general_config, sample, output_path, lock):
     else:
         mas = MAS_METHOD(general_config)
     save_data = sample.copy()
-    query = sample["query"]
     try:
-        response = mas.inference(query)
-        save_data["generated_output"] = response
+        mas_output = mas.inference(sample)
+        if "response" not in mas_output:    # ensure that there is a key named "response"
+            raise ValueError(f"The key 'response' is not found in the MAS output: {mas_output}")
+        save_data.update(mas_output)
     except Exception as e:
         save_data["error"] = f"Inference Error: {traceback.format_exc()}"
     save_data.update({"token_stats": mas.get_token_stats()})
@@ -81,18 +82,17 @@ if __name__ == "__main__":
     
     if args.debug:
         # MAS inference
-        query = "If $|x+5|-|3x-6|=0$, find the largest possible value of $x$. Express your answer as an improper fraction."     # ground-truth is "\\frac{11}{2}"
-        # query = "hello"
+        sample = {"query": "If $|x+5|-|3x-6|=0$, find the largest possible value of $x$. Express your answer as an improper fraction."}
         MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
         if args.method_config_name is not None:
             mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
         else:
             mas = MAS_METHOD(general_config)
 
-        response = mas.inference(query)
+        response = mas.inference(sample)
         
         print(response)
-        print(f"\n>> Token stats: {mas.get_token_stats()}")
+        print(f"\n>> Token stats: {json.dumps(mas.get_token_stats(), indent=4)}")
     
     else:
         print(f">> Method: {args.method_name} | Dataset: {args.test_dataset_name}")

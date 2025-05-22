@@ -4,10 +4,10 @@ class CoT(MAS):
     def __init__(self, general_config):
         super().__init__(general_config)
     
-    def inference(self, query):
+    def inference(self, sample):
         
-        prompt = query + "\n\nLet's think step by step."
+        prompt = sample["query"] + "\n\nLet's think step by step."
         
         response = self.call_llm(prompt=prompt)
 
-        return response
+        return {"response": response}

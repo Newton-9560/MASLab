@@ -27,12 +27,13 @@ class MAS():
         self.tools = {}
         
     
-    def inference(self, query):
+    def inference(self, sample):
         """
-        query: Query to be passed to the MAS
+        sample: data sample (dictionary) to be passed to the MAS
         """
+        query = sample["query"]
         response = self.call_llm(prompt=query)
-        return response
+        return {"response": response}
 
     @retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5), retry_error_callback=handle_retry_error)
     def call_llm(self, prompt=None, system_prompt=None, messages=None, model_name=None, temperature=None):

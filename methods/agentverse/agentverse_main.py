@@ -20,7 +20,10 @@ class Agentverse_MAIN(MAS):
         self.advice = "No advice yet."
         self.history = []
     
-    def inference(self, query):
+    def inference(self, sample):
+
+        query = sample["query"]
+
         for i in range(self.max_turn):
             # Assign roles to agents
             role_descriptions = self.assign_roles(query)
@@ -35,7 +38,7 @@ class Agentverse_MAIN(MAS):
                 break
             else:
                 self.advice = feedback
-        return solution
+        return {"response": solution}
 
     def assign_roles(self, query: str):
         # Fetch prompts from config.yaml (assumed to be loaded earlier)
