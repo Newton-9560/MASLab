@@ -8,10 +8,7 @@ from .prompt_humaneval import *
 
 class AgentVerse_HumanEval(MAS):
     def __init__(self, general_config, method_config_name = "config_humaneval"):
-        super().__init__(general_config)
-        
-        self.dimensions: List[str] = ["Score", "Response"]
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", f"{method_config_name}.yaml"))
+        super().__init__(general_config, method_config_name)
         
         self.max_turn = self.method_config['max_turn']
         self.cnt_agents = self.method_config['cnt_agents']

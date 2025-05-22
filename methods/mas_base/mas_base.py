@@ -10,7 +10,9 @@ class MAS():
     def __init__(self, general_config, method_config_name=None):
 
         if method_config_name is not None:
-            self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
+            # Get the child class's module path
+            child_module_path = os.path.dirname(os.path.abspath(self.__class__.__module__.replace('.', '/')))
+            self.method_config = load_config(os.path.join(child_module_path, "configs", f"{method_config_name}.yaml"))
         
         self.model_api_config = general_config["model_api_config"]
         self.model_name = general_config["model_name"]

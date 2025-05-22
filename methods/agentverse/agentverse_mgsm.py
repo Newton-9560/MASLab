@@ -9,8 +9,7 @@ from .prompt_mgsm import *
 # Define the NEWMAS class which inherits from MAS and implements the inference method
 class AgentVerse_MGSM(MAS):
     def __init__(self, general_config, method_config_name = "config_mgsm"):
-        super().__init__(general_config)
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", f"{method_config_name}.yaml"))
+        super().__init__(general_config, method_config_name)
         
         self.max_turn = self.method_config['max_turn']
         self.cnt_agents = self.method_config['cnt_agents']

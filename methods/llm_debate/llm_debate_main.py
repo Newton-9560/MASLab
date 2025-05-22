@@ -7,9 +7,8 @@ from ..utils import load_config
 
 class LLM_Debate_Main(MAS):
     def __init__(self, general_config, method_config_name="config_main"):
-        super().__init__(general_config)
+        super().__init__(general_config, method_config_name)
 
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
         self.agents_num = self.method_config["agents_num"]
         self.rounds_num = self.method_config["rounds_num"]
     

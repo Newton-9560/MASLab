@@ -1,7 +1,8 @@
 from .mas_base import MAS
 from .cot import CoT
-from .llm_debate import LLM_Debate_Main
 from .agentverse import AgentVerse_HumanEval, AgentVerse_MGSM, AgentVerse_Main
+from .llm_debate import LLM_Debate_Main
+from .dylan import DyLAN_HumanEval, DyLAN_MATH, DyLAN_MMLU, DyLAN_Main
 
 method2class = {
     "vanilla": MAS,
@@ -9,7 +10,11 @@ method2class = {
     "agentverse_humaneval": AgentVerse_HumanEval,
     "agentverse_mgsm": AgentVerse_MGSM,
     "agentverse": AgentVerse_Main,
-    "llm_debate": LLM_Debate_Main
+    "llm_debate": LLM_Debate_Main,
+    "dylan_humaneval": DyLAN_HumanEval,
+    "dylan_math": DyLAN_MATH,
+    "dylan_mmlu": DyLAN_MMLU,
+    "dylan": DyLAN_Main
 }
 
 def get_method_class(method_name, dataset_name=None):
