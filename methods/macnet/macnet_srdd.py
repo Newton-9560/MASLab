@@ -187,7 +187,7 @@ class Node:
         # print(colored(f"ERROR: Node {self.id} has reached the retry limit!\n",'red'))
         return 1
     
-class Macnet_SRDD(MAS):
+class MacNet_SRDD(MAS):
     def __init__(self, general_config, method_config_name="config"):
         super().__init__(general_config)
 

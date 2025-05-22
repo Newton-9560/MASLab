@@ -6,7 +6,7 @@ from .dylan import DyLAN_HumanEval, DyLAN_MATH, DyLAN_MMLU, DyLAN_Main
 from .autogen import AutoGen_Main
 from .camel import CAMEL_Main
 from .evomac import EvoMAC_Main
-from .chatdev import ChatDev_Main
+from .chatdev import ChatDev_SRDD
 from .macnet import MacNet_Main, MacNet_SRDD
 
 method2class = {
@@ -23,7 +23,7 @@ method2class = {
     "autogen": AutoGen_Main,
     "camel": CAMEL_Main,
     "evomac": EvoMAC_Main,
-    "chatdev": ChatDev_Main,
+    "chatdev_srdd": ChatDev_SRDD,
     "macnet": MacNet_Main,
     "macnet_srdd": MacNet_SRDD
 }
