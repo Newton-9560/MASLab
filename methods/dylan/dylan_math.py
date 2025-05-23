@@ -4,7 +4,6 @@ import os
 from typing import Dict, List, Tuple, Any
 
 from methods.mas_base import MAS
-from methods.utils import load_config
 from .utils_math import get_examples
 
 class DyLAN_MATH(MAS):
@@ -15,9 +14,6 @@ class DyLAN_MATH(MAS):
     def __init__(self, general_config, method_config_name="config_math"):
         """Initialize Dylan-Math with configurations."""
         super().__init__(general_config, method_config_name)
-        
-        # Load method-specific config
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
         
         # Set configuration variables
         self.seed = self.method_config.get("random_seed", 0)

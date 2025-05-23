@@ -3,7 +3,6 @@ import re
 from typing import List, Dict, Any, Set, Tuple
 
 from methods.mas_base import MAS
-from methods.utils import load_config
 from .prompt_humaneval import *
 
 class AgentVerse_HumanEval(MAS):

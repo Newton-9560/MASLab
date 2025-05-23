@@ -8,7 +8,6 @@ from collections import defaultdict, deque
 from methods.mas_base import MAS
 from methods.evomac.codes import Codes
 from methods.evomac.graph import Organization
-from methods.utils import load_config
 from methods.evomac.prompt import INITIAL_CODING_ROLE, INITIAL_CODING, ORGANIZER, ORGANIZING, PROGRAMMER, SUBCODECOMPLETE, TESTORGANIZING, TESTCODECOMPLETE, UPDATING
 
 class EvoMAC_Main(MAS):

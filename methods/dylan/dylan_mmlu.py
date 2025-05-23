@@ -4,16 +4,12 @@ import re
 import math
 
 from methods.mas_base import MAS
-from methods.utils import load_config
 from .utils_mmlu import SYSTEM_PROMPT_MMLU, ROLE_MAP, ACTIVATION_MAP, parse_ranks, parse_single_choice, most_frequent
 
 class DyLAN_MMLU(MAS):
     
     def __init__(self, general_config, method_config_name = "config_mmlu"):
-        super().__init__(general_config)
-        
-        # Load configuration
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
+        super().__init__(general_config, method_config_name)
         
         # Set random seed for reproducibility
         self.seed = self.method_config.get('random_seed', 0)

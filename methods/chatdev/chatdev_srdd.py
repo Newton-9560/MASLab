@@ -7,7 +7,6 @@ from datetime import datetime
 import wikipediaapi
 import difflib
 from ..mas_base import MAS
-from ..utils import load_config
 from .prompt_srdd import Role_configs, Phase_configs, background_prompt
 
 from typing import List, Dict

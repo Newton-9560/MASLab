@@ -188,10 +188,9 @@ class Node:
         return 1
     
 class MacNet_SRDD(MAS):
-    def __init__(self, general_config, method_config_name="config"):
-        super().__init__(general_config)
+    def __init__(self, general_config, method_config_name="config_main"):
+        super().__init__(general_config, method_config_name)
 
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
         self.dataset_name=general_config["test_dataset_name"]
         self.model_name= self.model_dict_list[0]['model_name']
         self.agent_num = self.method_config["agent_num"]

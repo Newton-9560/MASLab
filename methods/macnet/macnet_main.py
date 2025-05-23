@@ -4,7 +4,6 @@ import math
 import random
 
 from ..mas_base import MAS
-from ..utils import load_config
 from .prompt_main import *
 
 class Node:

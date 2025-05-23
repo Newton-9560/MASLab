@@ -3,7 +3,6 @@
 
 import os
 from ..mas_base import MAS
-from ..utils import load_config
 
 class LLM_Debate_Main(MAS):
     def __init__(self, general_config, method_config_name="config_main"):

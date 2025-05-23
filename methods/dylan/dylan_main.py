@@ -4,7 +4,6 @@ import re
 import os
 
 from methods.mas_base import MAS
-from methods.utils import load_config
 
 class DyLAN_Main(MAS):
     """

@@ -8,6 +8,7 @@ from .camel import CAMEL_Main
 from .evomac import EvoMAC_Main
 from .chatdev import ChatDev_SRDD
 from .macnet import MacNet_Main, MacNet_SRDD
+from .mad import MAD_Main
 
 method2class = {
     "vanilla": MAS,
@@ -25,7 +26,8 @@ method2class = {
     "evomac": EvoMAC_Main,
     "chatdev_srdd": ChatDev_SRDD,
     "macnet": MacNet_Main,
-    "macnet_srdd": MacNet_SRDD
+    "macnet_srdd": MacNet_SRDD,
+    "mad": MAD_Main
 }
 
 def get_method_class(method_name, dataset_name=None):

@@ -4,7 +4,6 @@ import sys
 import io
 import subprocess
 from ..mas_base import MAS
-from ..utils import load_config
 from .prompt import ASSISTANT_AGENT_SYSTEM_MESSAGE_CODER, ASSISTANT_AGENT_SYSTEM_MESSAGE, DEFAULT_USER_PROXY_AGENT_SYSTEM_MESSAGE
 
 from typing import List, Dict

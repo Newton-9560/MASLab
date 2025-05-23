@@ -8,7 +8,6 @@ from sacrebleu import sentence_bleu
 
 # Import from MAS base
 from methods.mas_base import MAS
-from methods.utils import load_config
 from .utils_humaneval import *
 
 class DyLAN_HumanEval(MAS):
@@ -18,9 +17,7 @@ class DyLAN_HumanEval(MAS):
     """
     
     def __init__(self, general_config, method_config_name="config_humaneval"):
-        super().__init__(general_config)
-        
-        self.method_config = load_config(os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{method_config_name}.yaml"))
+        super().__init__(general_config, method_config_name)
                
         self.seed = self.method_config.get('random_seed', 0)
         self.num_agents = self.method_config.get('num_agents', 4)

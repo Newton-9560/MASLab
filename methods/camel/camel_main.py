@@ -1,6 +1,6 @@
 import os
 from ..mas_base import MAS
-from ..utils import load_config, handle_retry_error
+from ..utils import handle_retry_error
 import re
 
 import json
