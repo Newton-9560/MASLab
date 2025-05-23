@@ -8,6 +8,7 @@
 - **Research-Friendly:** MASLab implements methods within a shared streamlined structure.
 
 ## News
+- [20250523] Release the preprint version! See the [ArXiv](https://arxiv.org/pdf/2505.16988).
 - [20250420] Release the initial version! See the initial manuscript [here](./assets/MASLab_github.pdf).
 
 ## Get Started
