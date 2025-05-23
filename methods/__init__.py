@@ -9,6 +9,7 @@ from .evomac import EvoMAC_Main
 from .chatdev import ChatDev_SRDD
 from .macnet import MacNet_Main, MacNet_SRDD
 from .mad import MAD_Main
+from .mapcoder import MapCoder_HumanEval, MapCoder_MBPP
 
 method2class = {
     "vanilla": MAS,
@@ -27,7 +28,9 @@ method2class = {
     "chatdev_srdd": ChatDev_SRDD,
     "macnet": MacNet_Main,
     "macnet_srdd": MacNet_SRDD,
-    "mad": MAD_Main
+    "mad": MAD_Main,
+    "mapcoder_humaneval": MapCoder_HumanEval,
+    "mapcoder_mbpp": MapCoder_MBPP
 }
 
 def get_method_class(method_name, dataset_name=None):
