@@ -39,3 +39,13 @@ python inference.py --method_name <method_name> --test_dataset_name <dataset_nam
 # Or Step 2 (Parallel): Inference on the whole dataset
 python inference.py --method_name <method_name> --test_dataset_name <dataset_name>
 ```
+
+## Citation
+```
+@article{ye2025maslab,
+  title={MASLab: A Unified and Comprehensive Codebase for LLM-based Multi-Agent Systems},
+  author={Ye, Rui and Huang, Keduan and Wu, Qimin and Cai, Yuzhu and Jin, Tian and Pang, Xianghe and Liu, Xiangrui and Su, Jiaqi and Qian, Chen and Tang, Bohan and others},
+  journal={arXiv preprint arXiv:2505.16988},
+  year={2025}
+}
+```
