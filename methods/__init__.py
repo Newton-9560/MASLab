@@ -10,6 +10,7 @@ from .chatdev import ChatDev_SRDD
 from .macnet import MacNet_Main, MacNet_SRDD
 from .mad import MAD_Main
 from .mapcoder import MapCoder_HumanEval, MapCoder_MBPP
+from .self_consistency import SelfConsistency
 
 method2class = {
     "vanilla": MAS,
@@ -30,7 +31,8 @@ method2class = {
     "macnet_srdd": MacNet_SRDD,
     "mad": MAD_Main,
     "mapcoder_humaneval": MapCoder_HumanEval,
-    "mapcoder_mbpp": MapCoder_MBPP
+    "mapcoder_mbpp": MapCoder_MBPP,
+    "self_consistency": SelfConsistency_Main
 }
 
 def get_method_class(method_name, dataset_name=None):
