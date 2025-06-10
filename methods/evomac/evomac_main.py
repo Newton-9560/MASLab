@@ -11,7 +11,8 @@ from methods.evomac.graph import Organization
 from methods.evomac.prompt import INITIAL_CODING_ROLE, INITIAL_CODING, ORGANIZER, ORGANIZING, PROGRAMMER, SUBCODECOMPLETE, TESTORGANIZING, TESTCODECOMPLETE, UPDATING
 
 class EvoMAC_Main(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
 
         self.iteration = self.method_config['iteration']

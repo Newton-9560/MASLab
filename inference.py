@@ -24,10 +24,7 @@ def write_to_jsonl(lock, file_name, data):
 
 def process_sample(args, general_config, sample, output_path, lock):
     MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
-    if args.method_config_name is not None:
-        mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
-    else:
-        mas = MAS_METHOD(general_config)
+    mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
     save_data = sample.copy()
     try:
         mas_output = mas.inference(sample)
@@ -120,10 +117,7 @@ if __name__ == "__main__":
         if args.require_val:
             # get MAS instance
             MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
-            if args.method_config_name is not None:
-                mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
-            else:
-                mas = MAS_METHOD(general_config)
+            mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
             mas.optimizing(val_dataset)
         
         # inference the mas

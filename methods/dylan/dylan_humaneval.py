@@ -16,7 +16,8 @@ class DyLAN_HumanEval(MAS):
     All functionality from LLMNeuron, JudgeNeuron, and CoLLMLP is integrated here.
     """
     
-    def __init__(self, general_config, method_config_name="config_humaneval"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_humaneval" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
                
         self.seed = self.method_config.get('random_seed', 0)

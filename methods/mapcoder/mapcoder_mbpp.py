@@ -7,7 +7,8 @@ from methods.mapcoder.func_evaluate import evaluate_functional_correctness
 from methods.mapcoder.prompt import INPUT_KB_EXEMPLARS, ALGORITHM_PROMPT, SAMPLE_IO_PROMPT, PLANNING, PLANNING_FOR_VERIFICATION, FINAL_CODE_GENARATION, IMPROVING_CODE
 
 class MapCoder_MBPP(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
 
         self.k = self.method_config["k"] 

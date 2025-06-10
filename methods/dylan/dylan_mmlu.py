@@ -8,7 +8,8 @@ from .utils_mmlu import SYSTEM_PROMPT_MMLU, ROLE_MAP, ACTIVATION_MAP, parse_rank
 
 class DyLAN_MMLU(MAS):
     
-    def __init__(self, general_config, method_config_name = "config_mmlu"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_mmlu" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         
         # Set random seed for reproducibility

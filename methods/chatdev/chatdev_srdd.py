@@ -12,7 +12,8 @@ from .prompt_srdd import Role_configs, Phase_configs, background_prompt
 from typing import List, Dict
 
 class ChatDev_SRDD(MAS):
-    def __init__(self, general_config, method_config_name="config_srdd"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_srdd" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         
         self.version = 1.0

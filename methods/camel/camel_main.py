@@ -12,7 +12,8 @@ from tenacity import retry, wait_exponential, stop_after_attempt
 from .prompt_main import SystemPromptGenerator 
 
 class CAMEL_Main(MAS):
-    def __init__(self, model_config, method_config_name="config_main"):
+    def __init__(self, model_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(model_config, method_config_name)
 
         self.chat_turn_limit = self.method_config["chat_turn_limit"]

@@ -32,7 +32,7 @@ method2class = {
     "mad": MAD_Main,
     "mapcoder_humaneval": MapCoder_HumanEval,
     "mapcoder_mbpp": MapCoder_MBPP,
-    "self_consistency": SelfConsistency_Main
+    "self_consistency": SelfConsistency
 }
 
 def get_method_class(method_name, dataset_name=None):

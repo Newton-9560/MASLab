@@ -5,7 +5,8 @@ import os
 from ..mas_base import MAS
 
 class LLM_Debate_Main(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
 
         self.agents_num = self.method_config["agents_num"]

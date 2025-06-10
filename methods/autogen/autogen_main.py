@@ -9,7 +9,8 @@ from .prompt import ASSISTANT_AGENT_SYSTEM_MESSAGE_CODER, ASSISTANT_AGENT_SYSTEM
 from typing import List, Dict
 
 class AutoGen_Main(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         
         self.max_turn = self.method_config['max_turn']

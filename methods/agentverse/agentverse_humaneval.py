@@ -6,7 +6,8 @@ from methods.mas_base import MAS
 from .prompt_humaneval import *
 
 class AgentVerse_HumanEval(MAS):
-    def __init__(self, general_config, method_config_name = "config_humaneval"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_humaneval" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         
         self.max_turn = self.method_config['max_turn']

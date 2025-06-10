@@ -188,7 +188,8 @@ class Node:
         return 1
     
 class MacNet_SRDD(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
 
         self.dataset_name=general_config["test_dataset_name"]

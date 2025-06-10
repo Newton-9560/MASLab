@@ -11,7 +11,8 @@ class DyLAN_Main(MAS):
     Inherits from MAS base class.
     """
     
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         """
         Initialize the DyLAN method.
         

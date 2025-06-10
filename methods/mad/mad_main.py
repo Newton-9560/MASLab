@@ -11,7 +11,8 @@ NAME_LIST = [
 ]
 
 class MAD_Main(MAS):
-    def __init__(self, general_config, method_config_name="config_main"):
+    def __init__(self, general_config, method_config_name=None):
+        method_config_name = "config_main" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         self.config = {}
         

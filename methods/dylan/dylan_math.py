@@ -11,8 +11,9 @@ class DyLAN_MATH(MAS):
     A method that uses multiple agents to solve math problems with a debate procedure.
     """
 
-    def __init__(self, general_config, method_config_name="config_math"):
+    def __init__(self, general_config, method_config_name=None):
         """Initialize Dylan-Math with configurations."""
+        method_config_name = "config_math" if method_config_name is None else method_config_name
         super().__init__(general_config, method_config_name)
         
         # Set configuration variables
