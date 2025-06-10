@@ -11,6 +11,7 @@ from .macnet import MacNet_Main, MacNet_SRDD
 from .mad import MAD_Main
 from .mapcoder import MapCoder_HumanEval, MapCoder_MBPP
 from .self_consistency import SelfConsistency
+from .mav import MAV_GPQA, MAV_HumanEval, MAV_Main, MAV_MATH, MAV_MMLU
 
 method2class = {
     "vanilla": MAS,
@@ -32,7 +33,12 @@ method2class = {
     "mad": MAD_Main,
     "mapcoder_humaneval": MapCoder_HumanEval,
     "mapcoder_mbpp": MapCoder_MBPP,
-    "self_consistency": SelfConsistency
+    "self_consistency": SelfConsistency,
+    "mav_gpqa": MAV_GPQA,
+    "mav_humaneval": MAV_HumanEval,
+    "mav_main": MAV_Main,
+    "mav_math": MAV_MATH,
+    "mav_mmlu": MAV_MMLU
 }
 
 def get_method_class(method_name, dataset_name=None):

@@ -7,20 +7,7 @@ from tqdm import tqdm
 import traceback
 
 from methods import get_method_class
-
-def load_model_api_config(model_api_config, model_name):
-    with open(model_api_config, "r") as f:
-        model_api_config = json.load(f)
-    for model_name in model_api_config:
-        actural_max_workers = model_api_config[model_name]["max_workers_per_model"] * len(model_api_config[model_name]["model_list"])
-        model_api_config[model_name]["max_workers"] = actural_max_workers
-    return model_api_config
-
-def write_to_jsonl(lock, file_name, data):
-    with lock:
-        with open(file_name, 'a') as f:
-            json.dump(data, f)
-            f.write('\n')
+from utils import reserve_unprocessed_queries, load_model_api_config, write_to_jsonl
 
 def process_sample(args, general_config, sample, output_path, lock):
     MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
@@ -35,17 +22,6 @@ def process_sample(args, general_config, sample, output_path, lock):
         save_data["error"] = f"Inference Error: {traceback.format_exc()}"
     save_data.update({"token_stats": mas.get_token_stats()})
     write_to_jsonl(lock, output_path, save_data)
-
-def reserve_unprocessed(output_json, test_dataset):
-    processed_queries = set()
-    if os.path.exists(output_json):
-        with open(output_json, "r") as f:
-            for line in f:
-                infered_sample = json.loads(line)
-                processed_queries.add(infered_sample["query"])
-
-    test_dataset = [sample for sample in test_dataset if sample["query"] not in processed_queries]
-    return test_dataset
 
 if __name__ == "__main__":
     
@@ -81,10 +57,7 @@ if __name__ == "__main__":
         # MAS inference
         sample = {"query": "If $|x+5|-|3x-6|=0$, find the largest possible value of $x$. Express your answer as an improper fraction."}
         MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
-        if args.method_config_name is not None:
-            mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
-        else:
-            mas = MAS_METHOD(general_config)
+        mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
 
         response = mas.inference(sample)
         
@@ -110,7 +83,7 @@ if __name__ == "__main__":
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         
         # reserve unprocessed samples
-        test_dataset = reserve_unprocessed(output_path, test_dataset)
+        test_dataset = reserve_unprocessed_queries(output_path, test_dataset)
         print(f">> After filtering: {len(test_dataset)} samples")
         
         # optimize mas if required (e.g., GPTSwarm, ADAS, and AFlow)
