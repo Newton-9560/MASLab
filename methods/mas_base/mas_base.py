@@ -52,26 +52,36 @@ class MAS():
                 messages = [{"role": "user", "content": prompt}]
         
         model_temperature = temperature if temperature is not None else self.model_temperature
-
         request_dict = {
             "model": model_name,
             "messages": messages,
             "max_tokens": self.model_max_tokens,
-            "timeout": self.model_timeout
+            "timeout": self.model_timeout,
+            "logprobs": True,
         }
         if "o1" not in model_name:              # OpenAI's o1 models do not support temperature
             request_dict["temperature"] = model_temperature
+        
+        # print("*"*50)
+        # print('messages:', messages)
 
         llm = openai.OpenAI(base_url=model_url, api_key=api_key)
         try:
             completion = llm.chat.completions.create(**request_dict)
             response, num_prompt_tokens, num_completion_tokens = completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+            token_list = [i.token for i in completion.choices[0].logprobs.content]
+            logprob_list = [i.logprob for i in completion.choices[0].logprobs.content]
+            # print(logprob_list)
         finally:
             llm.close()     # TODO: Check if this is necessary
-
+        
+        # print('\n>> LLM Response:')
+        # print('response:', response)
+        # print("*"*50)
+        
         if isinstance(response, str):       # in cases where response is None or an error message
             if model_name not in self.token_stats:
-                self.token_stats[model_name] = {"num_llm_calls": 0, "prompt_tokens": 0, "completion_tokens": 0}
+                self.token_stats[model_name] = {"num_llm_calls": 1, "prompt_tokens": num_prompt_tokens, "completion_tokens": num_completion_tokens}
             else:
                 self.token_stats[model_name]["num_llm_calls"] += 1
                 self.token_stats[model_name]["prompt_tokens"] += num_prompt_tokens

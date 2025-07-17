@@ -18,7 +18,9 @@ class DyLAN_MMLU(MAS):
         # Set default roles if not provided
         self.roles = self.method_config.get('roles', ["Assistant", "Mathematician", "Economist", "Psychologist"])
         self.agents_count = len(self.roles)
+        print(f"Roles: {self.roles}, Agents count: {self.agents_count}")
         self.num_rounds = self.method_config.get('num_rounds', 3)
+        print(f"Number of rounds: {self.num_rounds}")
         self.activation = self.method_config.get('activation', 'listwise')
         self.qtype = self.method_config.get('type', 'single_choice')
         
@@ -65,6 +67,8 @@ class DyLAN_MMLU(MAS):
             if len(activated_indices) >= math.floor(2/3 * self.agents_count):
                 reached, reply = self.check_consensus(activated_indices, list(range(self.agents_count)))
                 if reached:
+                    print("Reached consensus in first round.")
+                    print("Reply:", reply)
                     return reply
 
         # Second round
@@ -184,7 +188,9 @@ class DyLAN_MMLU(MAS):
     def get_context(self, node_idx):
         sys_prompt = ROLE_MAP[self.nodes[node_idx]['role']] + "\n" + SYSTEM_PROMPT_MMLU
         contexts = [{"role": "system", "content": sys_prompt}]
-        
+        from colorama import init, Fore, Back, Style
+        init(autoreset=True)
+        print(Back.GREEN + str(self.nodes[node_idx]['from_edges']))
         formers = [(self.nodes[edge['a1']]['reply'], eid) 
                   for eid, edge in enumerate(self.nodes[node_idx]['from_edges']) 
                   if self.nodes[edge['a1']]['reply'] is not None and self.nodes[edge['a1']]['active']]
@@ -209,8 +215,8 @@ class DyLAN_MMLU(MAS):
         # Using call_llm
         response = self.call_llm(messages=contexts)
         node['reply'] = response
-        print(node['reply'])
-        
+        print('reply: ', node['reply'])
+        print('*'*50)
         # parse answer
         node['answer'] = parse_single_choice(node['reply'])
         weights = self.weights_parser(node['reply'])
@@ -229,7 +235,7 @@ class DyLAN_MMLU(MAS):
         for eid, weight in enumerate(weights):
             edges[eid]['weight'] = weight / 5 if 0 < weight <= 5 else (1 if weight > 5 else 0)
             
-        print([edge['weight'] for edge in edges])
+        # print([edge['weight'] for edge in edges])
         
         # normalize weights
         total = sum(edge['weight'] for edge in edges)
@@ -240,15 +246,15 @@ class DyLAN_MMLU(MAS):
             for edge in edges:
                 edge['weight'] = 1 / len(edges)
 
-        print(node['answer'])
-        print([edge['weight'] for edge in edges])
+        print('answer:', node['answer'])
+        # print([edge['weight'] for edge in edges])
 
     def check_consensus(self, idxs, idx_mask):
         candidates = [self.nodes[idx]['answer'] for idx in idxs]
         consensus_answer, ca_cnt = most_frequent(candidates, lambda x, y: x == y)
         if ca_cnt > math.floor(2/3 * len(idx_mask)):
             print("Consensus answer: {}".format(consensus_answer))
-            return True, consensus_answer
+            return True, {"response": consensus_answer}
         return False, None
 
     def listwise_ranker_2(self, responses, question):

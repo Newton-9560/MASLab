@@ -1,13 +1,7 @@
 {
-    "llama-3.3-70b-instruct": {
+    "Meta-Llama-3-8B-Instruct": {
         "model_list": [
-            {"model_name": "llama-3.3-70b-instruct", "model_url": "http://a.b.c.d:e/v1", "api_key": "EMPTY"}
-        ],
-        "max_workers_per_model": 10
-    },
-    "gpt-4o-mini-2024-07-18": {
-        "model_list": [
-            {"model_name": "gpt-4o-mini-2024-07-18", "model_url": "http://a.b.c.d:e/v1", "api_key": "xyz"}
+            {"model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct", "model_url": "https://api.deepinfra.com/v1/openai", "api_key": "bIqaNDIFG0wrNSOPmlbIPzqIinK5sTvI"}
         ],
         "max_workers_per_model": 10
     }
