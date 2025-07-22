@@ -1,6 +1,7 @@
 import os
 import random
 import openai
+from termcolor import colored
 from tenacity import retry, wait_exponential, stop_after_attempt
 
 from methods.utils import handle_retry_error, load_config
@@ -38,18 +39,19 @@ class MAS():
         return {"response": response}
 
     @retry(wait=wait_exponential(multiplier=1, min=4, max=10), stop=stop_after_attempt(5), retry_error_callback=handle_retry_error)
-    def call_llm(self, prompt=None, system_prompt=None, messages=None, model_name=None, temperature=None):
-        
+    def call_llm(self, prompt=None, system_prompt=None, messages=None, model_name=None, temperature=None, logprobs=False, number_generated=1):
         model_name = model_name if model_name is not None else self.model_name
         model_dict = random.choice(self.model_api_config[model_name]["model_list"])
         model_name, model_url, api_key = model_dict['model_name'], model_dict['model_url'], model_dict['api_key']
-        
         if messages is None:
             assert prompt is not None, "'prompt' must be provided if 'messages' is not provided."
             if system_prompt is not None:
                 messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}]
             else:
                 messages = [{"role": "user", "content": prompt}]
+
+        # TODO
+        # print(colored(f"Message: {messages}", "green"))
         
         model_temperature = temperature if temperature is not None else self.model_temperature
         request_dict = {
@@ -57,7 +59,7 @@ class MAS():
             "messages": messages,
             "max_tokens": self.model_max_tokens,
             "timeout": self.model_timeout,
-            "logprobs": True,
+            "logprobs": logprobs,
         }
         if "o1" not in model_name:              # OpenAI's o1 models do not support temperature
             request_dict["temperature"] = model_temperature
@@ -65,21 +67,30 @@ class MAS():
         # print("*"*50)
         # print('messages:', messages)
 
+
         llm = openai.OpenAI(base_url=model_url, api_key=api_key)
         try:
-            completion = llm.chat.completions.create(**request_dict)
-            response, num_prompt_tokens, num_completion_tokens = completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
-            token_list = [i.token for i in completion.choices[0].logprobs.content]
-            logprob_list = [i.logprob for i in completion.choices[0].logprobs.content]
-            # print(logprob_list)
+            generation_list = []
+            logprob_list = []
+            token_list = []
+            for i in range(number_generated):
+                if i != 0:
+                    request_dict['temperature'] = 1.0
+                # print(colored(f"Temperature: {request_dict['temperature']}", "green"))
+                completion = llm.chat.completions.create(**request_dict)
+                response, num_prompt_tokens, num_completion_tokens = completion.choices[0].message.content, completion.usage.prompt_tokens, completion.usage.completion_tokens
+                generation_list.append(response)
+                if logprobs:
+                    token = [i.token for i in completion.choices[0].logprobs.content]
+                    logprob = [i.logprob for i in completion.choices[0].logprobs.content]
+                    logprob_list.append(logprob)
+                    token_list.append(token)
         finally:
             llm.close()     # TODO: Check if this is necessary
         
-        # print('\n>> LLM Response:')
-        # print('response:', response)
-        # print("*"*50)
+        #print(colored(f"The length of generation_list: {len(generation_list)}", "yellow"))
         
-        if isinstance(response, str):       # in cases where response is None or an error message
+        if isinstance(generation_list[0], str):       # in cases where response is None or an error message
             if model_name not in self.token_stats:
                 self.token_stats[model_name] = {"num_llm_calls": 1, "prompt_tokens": num_prompt_tokens, "completion_tokens": num_completion_tokens}
             else:
@@ -87,9 +98,12 @@ class MAS():
                 self.token_stats[model_name]["prompt_tokens"] += num_prompt_tokens
                 self.token_stats[model_name]["completion_tokens"] += num_completion_tokens
         else:
-            raise ValueError(f"Invalid response from LLM: {response}")
+            raise ValueError(f"Invalid response from LLM: {generation_list[0]}")
         
-        return response
+        if logprobs:
+            return generation_list, logprob_list, token_list
+        
+        return generation_list
 
     def get_token_stats(self):
         return self.token_stats

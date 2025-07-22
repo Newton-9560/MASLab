@@ -3,6 +3,12 @@
         "model_list": [
             {"model_name": "meta-llama/Meta-Llama-3.1-8B-Instruct", "model_url": "https://api.deepinfra.com/v1/openai", "api_key": "bIqaNDIFG0wrNSOPmlbIPzqIinK5sTvI"}
         ],
-        "max_workers_per_model": 10
+        "max_workers_per_model": 5
+    },
+    "Qwen/Qwen3-14B": {
+        "model_list": [
+            {"model_name": "Qwen/Qwen3-14B", "model_url": "https://api.deepinfra.com/v1/openai", "api_key": "bIqaNDIFG0wrNSOPmlbIPzqIinK5sTvI"}
+        ],
+        "max_workers_per_model": 5
     }
 }

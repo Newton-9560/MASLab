@@ -3,18 +3,22 @@ import json
 import argparse
 import threading
 import concurrent.futures
+from numba import np
 from tqdm import tqdm
 import traceback
+import random
+import string
 
 from methods import get_method_class
 from utils import reserve_unprocessed_queries, load_model_api_config, write_to_jsonl
+from recorder import SingleResponse, SingleQuestion, MASDataset
 
-def process_sample(args, general_config, sample, output_path, lock):
+def process_sample(args, general_config, sample, output_path, lock, dataset=None):
     MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
     mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
     save_data = sample.copy()
     try:
-        mas_output = mas.inference(sample)
+        mas_output = mas.inference(sample, dataset)
         if "response" not in mas_output:    # ensure that there is a key named "response"
             raise ValueError(f"The key 'response' is not found in the MAS output: {mas_output}")
         save_data.update(mas_output)
@@ -22,6 +26,22 @@ def process_sample(args, general_config, sample, output_path, lock):
         save_data["error"] = f"Inference Error: {traceback.format_exc()}"
     save_data.update({"token_stats": mas.get_token_stats()})
     write_to_jsonl(lock, output_path, save_data)
+    
+def inference_dataset(args, question_dataset, general_config, output_path, lock, pbar, pbar_lock):
+    dataset = MASDataset(args.test_dataset_name)
+    for sample in question_dataset:
+        process_sample(args, general_config, sample, output_path, lock, dataset)
+        with pbar_lock:
+            pbar.update(1)
+        if len(dataset.questions) == 10:
+            random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+            dataset.save_pickle(f"./results/{args.model_name}/{args.test_dataset_name}/{args.method_name}/{random_str}_infer.pkl")
+            dataset.questions = []
+    if len(dataset.questions) > 0:
+        random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+        dataset.save_pickle(f"./results/{args.model_name}/{args.test_dataset_name}/{args.method_name}/{random_str}_infer.pkl")
+        dataset.questions = []
+    return None
 
 if __name__ == "__main__":
     
@@ -55,11 +75,7 @@ if __name__ == "__main__":
     
     if args.debug:
         # MAS inference
-        sample = {"query": '''Question: Let p = (1, 2, 5, 4)(2, 3) in S_5. Find the index of ⟨p⟩ in S_5.
-                A) 8
-                B) 2  
-                C) 24
-                D) 120'''}
+        sample = {"query": "If $|x+5|-|3x-6|=0$, find the largest possible value of $x$. Express your answer as an improper fraction."}
         MAS_METHOD = get_method_class(args.method_name, args.test_dataset_name)
         mas = MAS_METHOD(general_config, method_config_name=args.method_config_name)
 
@@ -99,11 +115,28 @@ if __name__ == "__main__":
         
         # inference the mas
         lock = threading.Lock()
+        dataset = MASDataset(args.test_dataset_name)
         if args.sequential:
-            for sample in test_dataset:
-                process_sample(args, general_config, sample, output_path, lock)
+            for sample in tqdm(test_dataset, desc="Processing queries"):
+                process_sample(args, general_config, sample, output_path, lock, dataset)
+                if len(dataset.questions) == 10:
+                    random_str = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+                    dataset.save_pickle(f"./results/{args.model_name}/{args.test_dataset_name}/{args.method_name}/{random_str}_infer.pkl")
+                    dataset.questions = []
         else:
             max_workers = model_api_config[args.model_name]["max_workers"]
+            length = len(test_dataset)//max_workers
+            pbar = tqdm(total=length*max_workers, desc="Overall progress", position=0)
+            pbar_lock = threading.Lock()
+            print(f"Each worker will process {length} questions")
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                for _ in tqdm(executor.map(lambda sample: process_sample(args, general_config, sample, output_path, lock), test_dataset), total=len(test_dataset), desc="Processing queries"):
-                    pass
+                dataset_list = [test_dataset[i*length:(i+1)*length] for i in range(max_workers)]
+                futures = [executor.submit(inference_dataset, args, dataset_list[i], general_config, output_path, lock, pbar, pbar_lock) for i in range(max_workers)]
+                
+                for future in concurrent.futures.as_completed(futures):
+                    try:
+                        future.result()  # This will raise any exceptions that occurred
+                    except Exception as e:
+                        print(f"Worker failed with error: {e}")
+                        traceback.print_exc()
+            pbar.close()

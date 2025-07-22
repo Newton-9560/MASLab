@@ -212,6 +212,7 @@ class DyLAN_MMLU(MAS):
         
         contexts.append(self.construct_message(formers, question))
         
+        print(f">> Node {node_idx} contexts: {contexts}")
         # Using call_llm
         response = self.call_llm(messages=contexts)
         node['reply'] = response
